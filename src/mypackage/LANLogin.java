@@ -18,18 +18,16 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class LANLogin {
 
-	private final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-
 	public static void main(String[] args) {
-		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(11);
+		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 		scheduler.scheduleWithFixedDelay(new Task(), 0, 1, TimeUnit.HOURS);
 	}
@@ -40,14 +38,14 @@ class Task implements Runnable {
 
 	@Override
 	public void run() {
-		ChromeOptions options = new ChromeOptions();
-		options.setHeadless(true);
+		FirefoxOptions options = new FirefoxOptions();
+		//options.setHeadless(true);
 		options.setPageLoadStrategy(PageLoadStrategy.EAGER);
 
 		System.setProperty("wdm.cachePath", "Driver");
-		WebDriverManager.chromedriver().setup();
+		WebDriverManager.firefoxdriver().setup();
 
-		WebDriver driver = new ChromeDriver(options);
+		WebDriver driver = new FirefoxDriver(options);
 
 		try {
 			File outputFile = new File("log.txt");
@@ -72,7 +70,7 @@ class Task implements Runnable {
 		Path file = Paths.get("log.txt");
 		long count = Files.lines(file).count();
 
-		if(count > 5) {
+		if(count > 20) {
 			File inputFile = new File("log.txt");
 			File tempFile = new File("templog.txt");
 			if(tempFile.exists() == false)
